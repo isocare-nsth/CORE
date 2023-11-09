@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ir_memb_groupno" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1e977534-1d8d-4415-9c83-8f8f1ea5d64d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="as_coopid" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="as_groupno" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select member_no , dbo.ft_memname(coop_id , member_no) as fullname , group_no ,dbo.ft_memgrp(coop_id , membgroup_code) as fullgroup  from  mbmembmaster
+where group_no like $P{as_groupno}
+and resign_status = 0
+order by group_no , member_no]]>
+	</queryString>
+	<field name="member_no" class="java.lang.String"/>
+	<field name="fullname" class="java.lang.String"/>
+	<field name="group_no" class="java.lang.String"/>
+	<field name="fullgroup" class="java.lang.String"/>
+	<group name="group_groupno" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{group_no}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement uuid="ac721f1f-49dc-44b2-9d7f-4a786d0f35c9" x="0" y="0" width="555" height="20"/>
+					<textElement>
+						<font fontName="Angsana New" size="16" isBold="true" isUnderline="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["กลุ่มสมาชิกที่  "+($F{group_no}.trim() == "" ? "ไม่มีกลุ่ม" :$F{group_no})]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<textField>
+					<reportElement uuid="50c2a97a-b636-4e6e-90f4-0c0eff9de6ef" x="0" y="0" width="555" height="20"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font fontName="Angsana New" size="16" isBold="true" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["รวมกลุ่มสมาชิกที่  "+$F{group_no} + " จำนวน " +$V{group_groupno_COUNT} +" คน"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="501c5245-acf7-4bc6-b0e8-1fd0e6e4da1c" x="0" y="0" width="488" height="27"/>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[รายงาน รายชื่อตามกลุ่มสมาชิก]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3d0e10b0-fd2f-4d13-a1dd-d78988bcbfcf" x="488" y="0" width="46" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Angsana New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน้าที่ "+$V{PAGE_NUMBER}+"/"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="bf3e1e6b-6f57-4894-816d-2fd135dd55f2" x="534" y="0" width="21" height="20"/>
+				<textElement>
+					<font fontName="Angsana New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="8fc58a51-3904-4217-a14a-e0bf16a7abc0" x="31" y="20" width="81" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[เลขสมาชิก]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="50adeb96-e1a7-4459-8fb9-2f2154fc54ce" x="112" y="20" width="168" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[ชื่อ - นามสกุล]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e989d440-987b-4804-9496-9d4e6e3a8391" x="280" y="20" width="208" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[สังกัดสมาชิก]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1e3a2ebc-d7de-4c96-9241-9d498e31b77c" x="488" y="20" width="67" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[กลุ่มสมาชิก]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c714b7cf-f9bb-4b07-8487-6c28dc393e22" x="0" y="20" width="31" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[ลำดับ]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement uuid="1f7431d1-5db1-4756-8d74-a2a995868162" x="534" y="0" width="21" height="20">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1 ? false :true]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Angsana New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0cda3339-94b6-4224-bdf5-be6ccfeb7cd9" x="488" y="0" width="46" height="20">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1 ? false :true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font fontName="Angsana New" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หน้าที่ "+$V{PAGE_NUMBER}+"/"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="85d14b2b-bca5-44c9-b8b7-396a48392ce9" x="31" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{member_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="280369cc-8ff1-4815-984b-a66b5d62091c" x="112" y="0" width="168" height="20"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fullname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="045b561e-75cb-4fef-8b0b-9e78dd5af161" x="280" y="0" width="208" height="20"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fullgroup}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7f8e26b4-9710-4fa3-b500-9115bccff073" x="488" y="0" width="67" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{group_no}.trim() == "" ? "ไม่มีกลุ่ม" :$F{group_no})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0020c983-dfca-46d0-883d-bdc895bf5952" x="0" y="0" width="31" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{group_groupno_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

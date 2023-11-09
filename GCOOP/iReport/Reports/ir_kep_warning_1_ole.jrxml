@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ir_kep_warning_1_ole" language="groovy" pageWidth="595" pageHeight="842" columnWidth="483" leftMargin="56" rightMargin="56" topMargin="20" bottomMargin="20" uuid="e13aca20-6557-47b4-b636-144a411605cf">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="as_coopid" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="adtm_date" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="recv_period" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+$P{adtm_date} as date_txt ,
+master.*
+from (
+select kptempreceive.member_no ,
+kptempreceive.recv_period ,
+dbo.ft_memname( kptempreceive.coop_id , kptempreceive.member_no ) as fullname ,
+lncontmaster.loanapprove_date ,
+lncontmaster.loanapprove_amt ,
+dbo.ft_readthaibaht(lncontmaster.loanapprove_amt) as loanapprove_amt_txt ,
+kptempreceivedet.loancontract_no ,
+kptempreceivedet.item_payment ,
+dbo.ft_readthaibaht(kptempreceivedet.item_payment) as item_payment_txt
+from kptempreceive
+left join kptempreceivedet on kptempreceive.kpslip_no = kptempreceivedet.kpslip_no
+left join lncontmaster on kptempreceivedet.loancontract_no = lncontmaster.loancontract_no
+where
+kptempreceive.keeping_status <> 1
+and kptempreceive.recv_period = $P{recv_period}
+and kptempreceivedet.keepitemtype_code in ('L01','L02','L03')
+union
+select  kpmastreceive.member_no ,
+kpmastreceive.recv_period ,
+dbo.ft_memname( kpmastreceive.coop_id , kpmastreceive.member_no ) as fullname ,
+lncontmaster.loanapprove_date ,
+lncontmaster.loanapprove_amt ,
+dbo.ft_readthaibaht(lncontmaster.loanapprove_amt) as loanapprove_amt_txt ,
+kpmastreceivedet.loancontract_no ,
+kpmastreceivedet.item_payment ,
+dbo.ft_readthaibaht(kpmastreceivedet.item_payment) as item_payment_txt
+from kpmastreceive
+left join kpmastreceivedet on kpmastreceive.kpslip_no = kpmastreceivedet.kpslip_no
+left join lncontmaster on kpmastreceivedet.loancontract_no = lncontmaster.loancontract_no
+where
+kpmastreceive.keeping_status <> 1
+and kpmastreceive.recv_period = $P{recv_period}
+and kpmastreceivedet.keepitemtype_code in ('L01','L02','L03')
+) master
+group by
+recv_period ,
+member_no ,
+fullname ,
+loancontract_no ,
+loanapprove_date ,
+loanapprove_amt ,
+loanapprove_amt_txt ,
+item_payment_txt ,
+item_payment]]>
+	</queryString>
+	<field name="date_txt" class="java.sql.Date"/>
+	<field name="member_no" class="java.lang.String"/>
+	<field name="recv_period" class="java.lang.String"/>
+	<field name="fullname" class="java.lang.String"/>
+	<field name="loanapprove_date" class="java.sql.Timestamp"/>
+	<field name="loanapprove_amt" class="java.math.BigDecimal"/>
+	<field name="loanapprove_amt_txt" class="java.lang.String"/>
+	<field name="loancontract_no" class="java.lang.String"/>
+	<field name="item_payment" class="java.math.BigDecimal"/>
+	<field name="item_payment_txt" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="802" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="78b895cc-9977-46e4-8e31-73e3bf031a13" x="0" y="0" width="181" height="22"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[ที่  สอม. ...............................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f4c96bed-bb25-4ab3-82f7-dead4729c619" x="0" y="88" width="64" height="22"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[เรื่อง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f18f9aed-0ce9-48a4-b04a-50364d8a1933" x="0" y="110" width="64" height="22"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[เรียน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="822025ca-c421-4cda-99c6-0c9469b16ff8" x="0" y="132" width="64" height="22"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[อ้างอิง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ed02750b-637f-4ba8-ba53-e4f0eafb1e7c" x="0" y="308" width="483" height="22"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[ อันเป็นการกระทำที่ผิดสัญญาและทำให้สหกรณ์ได้รับความเสียหาย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b4f6632d-d6fa-4578-a4f4-341e899264fd" x="0" y="286" width="483" height="22"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[ (.....................................................................................)  ปรากฎว่าท่านยังไม่ได้ชำระหนี้ดังกล่าวให้แก่สหกรณ์ฯ ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="76c41434-7a42-4bf0-962e-60f88cf4ce01" x="0" y="374" width="483" height="22"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[นับแต่ได้รับหนังสือฉบับนี้เป็นต้นไป]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d8c8382b-44cb-4ed8-b603-d77cc0dea0fa" x="64" y="264" width="419" height="22"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[เนื่องจาก  การชำระหนี้งวดรายเดือน ................................... เป็นเงินจำนวน ............................ บาท]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b082a418-9866-4468-afcd-8a55128a9bbb" x="64" y="418" width="241" height="22"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[จึงเรียนมาเพื่อดำเนินการด้วย  จักขอบคุณยิ่ง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="55585b49-c698-4203-9099-b0c35af01ada" x="242" y="440" width="241" height="22"/>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[ขอแสดงความนับถือ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="84afce77-9382-474c-be93-7f900c853f57" x="242" y="506" width="241" height="22"/>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[(..........................................................)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d1335635-5892-4c66-a749-b86d7582f57d" x="242" y="528" width="241" height="22"/>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[ประธานกรรมการ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1b05c7f5-8008-43f0-9a16-3d2632313e34" x="242" y="550" width="241" height="22"/>
+				<textElement textAlignment="Center">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[สหกรณ์ออมทรัพย์มหาวิทยาลัยแม่โจ้ จำกัด]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="440341e7-58bd-4d79-86c9-4054287808a3" x="64" y="88" width="100" height="22"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[ขอให้ชำระหนี้]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b79149e6-1cbc-4fd1-afe8-549fb38974a5" x="64" y="352" width="419" height="22"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[สหกรณ์ฯ  จึงขอให้ท่านนำเงินดังกล่าวพร้อมดอกเบี้ยมาชำระให้แก่สหกรณ์ฯ ภายใน 15 วัน ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="852b2be8-9d49-4b4d-a559-95384c334f39" x="242" y="44" width="241" height="22"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd MMMM yyyy",new Locale("th","TH")).format($F{date_txt})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3f987840-27f3-494c-b412-1919bf043734" x="64" y="110" width="419" height="22"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fullname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c4b6bbaf-0e80-4b70-bc76-02421f8af1ed" x="64" y="132" width="419" height="22"/>
+				<textElement>
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA["๑. หนังสือสำหรับเงินกู้สามัญ สัญญาเลขที่  "
++ $F{loancontract_no} + "  ลงวันที่  " +
+new SimpleDateFormat("dd MMMM yyyy",new Locale("th","TH")).format($F{loanapprove_date})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="44566f40-5b08-498c-b132-391008998fc6" x="64" y="176" width="419" height="22"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[ตามหนังสือที่อ้างถึง  ท่านได้กู้เงินสหกรณ์อออมทรัพย์มหาวิทยาลัยแม่โจ้ จำกัด เป็นเงินจำนวน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="94d780e8-34ea-4fbc-9b01-9ec58471f4cc" x="0" y="198" width="493" height="22"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[.................................... บาท (........................................................)  และท่านได้รับเงินจำนวนดังกล่าวครบถ้วนแล้ว ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d918e271-f582-47e6-915f-6395daccb50a" x="0" y="220" width="483" height="22"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<text><![CDATA[โดยได้ตกลงชำระหนี้เป็นงวดรายเดือน งวดละ ........................ บาท ดังควาที่แจ้งอยู่แล้วนั้น]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="9766bb9f-0048-4d62-b9f5-cfee25e779a0" x="196" y="220" width="69" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_payment}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f9b5583a-1385-4037-bd02-1d34a42ed03d" x="10" y="286" width="221" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_payment_txt}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="a71a6722-e691-4a80-97b9-13bb71a6f07f" x="5" y="198" width="91" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{loanapprove_amt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4d6309ac-2eca-4c27-96f1-dcf690e546cb" x="127" y="198" width="149" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{loanapprove_amt_txt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6b09b3f9-042f-4bce-b0e7-7b6516cb5699" x="221" y="264" width="100" height="22"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{recv_period}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="a03ee516-eafb-48c3-a7a0-ae1d099cc6b5" x="383" y="264" width="76" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Angsana New" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_payment}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
